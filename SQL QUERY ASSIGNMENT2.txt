@@ -1,0 +1,183 @@
+1.	List the department without any employees in it.
+	
+	SELECT DEPTNO,DNAME
+	FROM DEPT  
+	WHERE DEPTNO NOT IN (SELECT DEPTNO FROM EMP)
+		
+		OR
+	
+	SELECT D.DEPTNO,D.DNAME
+	FROM DEPT D 
+	Left Outer Join EMP E ON D.DEPTNO = E.DEPTNO
+	WHERE E.DEPTNO IS NULL
+	
+
+2.	List the name and job of the employees who does not report to anybody.
+		
+	SELECT ENAME,JOB
+	FROM EMP
+	WHERE MGR IS NULL
+
+
+3.	Write a query that will give you the names and jobs of all employees in New York with a commission above 1000
+
+	SELECT E.ENAME,E.JOB
+	FROM EMP E JOIN  DEPT D
+	ON D.DEPTNO=E.DEPTNO 
+    	WHERE D.LOC="NEWYORK"
+    	GROUP BY E.ENAME
+	HAVING E.COMM>1000
+
+4.	How many employees work in Chicago?
+	
+	SELECT COUNT(ENAME)
+	FROM EMP E JOIN  DEPT D
+	ON D.DEPTNO=E.DEPTNO 
+    	WHERE D.LOC="CHICAGO"
+	
+
+5.	Which employees work in Chicago?
+
+	SELECT E.ENAME
+	FROM EMP E JOIN  DEPT D
+	ON D.DEPTNO=E.DEPTNO 
+    	WHERE D.LOC="CHICAGO"
+
+6.	List the employees’ names and cities in which they work. Order the list by city.
+	
+	SELECT E.ENAME,D.LOC
+	FROM EMP E JOIN  DEPT D
+	ON D.DEPTNO=E.DEPTNO 
+	ORDER BY D.LOC
+
+
+7.	Find the number of employees and number of departments.
+	
+	SELECT COUNT(ENAME) AS TOTALEMP, COUNT(DEPTNO) AS TOTALDEPT
+	FROM EMP 
+
+
+8.	Display the employees who were hired before their managers.
+		
+	SELECT *
+	FROM emp w, emp m
+	WHERE w.MGR = m.EMPNO
+	AND w.hiredate < m.hiredate;
+
+
+9.	Determine the number of managers without listing them.
+	
+	SELECT COUNT(JOB) AS TOTAL
+	FROM EMP
+	WHERE JOB="MANAGER"
+
+
+10.	Display the name and title of all employees who do not have a manager.
+	
+	SELECT ENAME,EMPNO,JOB
+	FROM EMP
+	WHERE MGR IS NULL
+
+
+11.	Create a query to display the employee name and department number for employee SMITH.
+	
+	SELECT ENAME,DEPTNO
+	FROM EMP
+	WHERE ENAME="SMITH"
+
+
+12.	Display the salesmen who are not in Boston
+
+	SELECT E.ENAME
+	FROM DEPT D,EMP E
+	WHERE E.DEPTNO=D.DEPTNO
+	GROUP BY E.ENAME
+	HAVING D.LOC NOT IN "BOSTON"
+
+
+
+13.	List the details of the employees along with their location
+
+	SELECT E.*,D.LOC
+	FROM EMP E, DEPT D
+	WHERE E.DEPTNO=D.DEPTNO
+	GROUP BY E.ENAME
+
+
+14.	List the salesmen who are drawing salary less than Miller
+	
+	SELECT ENAME,SAL
+	FROM EMP
+	WHERE SAL<(SELECT SAL FROM EMP
+			WHERE ENAME="MILLER")
+
+
+15.	Display the details of the employee working in Chicago
+	
+	SELECT E.*,D.LOC
+	FROM EMP E, DEPT D
+	WHERE E.DEPTNO=D.DEPTNO
+	GROUP BY E.ENAME
+	HAVING D.LOC="CHICAGO"
+
+
+16.	Find the names of all employees whose salaries are greater than the minimum salary for the Manager
+		
+	SELECT ename,sal
+	from emp
+	where sal>(select min(sal)
+           	   from emp
+		   where job='manager');
+
+
+17.	Select the last name and job id from all employees whose department id is equal to Accounting.
+
+	SELECT E.ENAME,E.JOB
+	FROM EMP E,DEPT D
+	WHERE E.DEPTNO=D.DEPTNO
+    	GROUP BY ENAME
+    	HAVING DNAME="ACCOUNTING"
+
+
+18.	Display those emp who are working as manager
+
+	SELECT ENAME
+	FROM EMP
+	WHERE JOB="MANAGER"
+
+
+19.	write a subquery using case statement to display non sales if department is not sales
+	
+	select dname,
+	case 
+        when dname='accounting' then 'not sales'
+		  when dname='research' then 'not sales'
+		  when dname='operations' then 'not sales'
+		  else 'sales'
+		  end as 'DESCRIPTION' 
+	from dept;
+
+
+20.	If salary of an employee is more than 1000, then display salary otherwise display 1000
+	
+	select sal, ename,
+	case 
+          	when sal>1000 then sal
+		else '1000'
+		end as 'description'
+	from emp;
+
+
+21.	Display salary as low, medium high based on salary range
+	Less than 1000 less
+	1000 to 2500 medium
+	More than 2500 high
+
+
+	Select sal,ename,
+	case  
+           when sal<1000 then 'low'
+	   when sal between 1000 and 2500 then 'medium'
+	   when sal>2500 then 'high'
+	   end as 'RANGE'
+	 from emp;
