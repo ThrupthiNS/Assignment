@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<form action="NewFile" method="post">
+<form action="Another" method="post">
 <input type="text" name="username">
 <input type="text" name="password">
 <button type="submit"> </button>
